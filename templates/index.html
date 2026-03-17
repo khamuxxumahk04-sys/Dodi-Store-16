@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodi-Store-16 | متجر المستقبل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --bg: #0a0e14;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --accent: #ff007a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: url('/hero.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero {
+            padding: 8rem 2rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-top: 50px;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 50px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.2);
+        }
+
+        .price {
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: #000;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Chat Widget */
+        #chat-widget {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 350px;
+            height: 500px;
+            background: rgba(10, 14, 20, 0.95);
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        #chat-header {
+            padding: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: #000;
+            border-radius: 20px 20px 0 0;
+            font-weight: bold;
+        }
+
+        #chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .message.bot {
+            background: var(--card-bg);
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: var(--primary);
+            color: #000;
+            align-self: flex-end;
+        }
+
+        #chat-input-area {
+            padding: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        /* Nudge Alert */
+        #nudge-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 0 20px var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div id="nudge-container"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">Dodi-Store-16</div>
+            <nav>
+                <a href="#" style="color: white; margin-right: 20px;">الرئيسية</a>
+                <a href="#" style="color: white; margin-right: 20px;">المنتجات</a>
+                <a href="#" class="btn">تسجيل الدخول</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>مستقبل التقنية بين يديك</h1>
+            <p>أول متجر مدار بالكامل بواسطة الذكاء الاصطناعي الإنشائي</p>
+        </section>
+
+        <!-- Hot Sale Urgency Banner -->
+        <div style="background: linear-gradient(90deg, #ff007a, #7928ca); color: white; padding: 10px; text-align: center; font-weight: bold; border-radius: 10px; margin-bottom: 30px; animation: pulse 2s infinite; border: 1px solid rgba(255,255,255,0.2);">
+            🔥 عرض لفترة محدودة: خصم 10% عند الدفع بـ USDT! استخدم الكود: DODI10 🔥
+        </div>
+
+        <section class="products">
+            <div class="product-card">
+                <div style="position: absolute; top: 10px; right: 10px; background: #ff007a; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold;">باقي 5 فقط!</div>
+                <h3>Neural Sensor Unit</h3>
+                <p>الحساس العصبي الأكثر دقة في العالم</p>
+                <div class="price">$150</div>
+                <button class="btn" onclick="buy('neural_sensor')">اطلب الآن</button>
+            </div>
+            <div class="product-card">
+                <div style="position: absolute; top: 10px; right: 10px; background: #ff007a; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold;">باقي 2 فقط!</div>
+                <h3>Quantum Chip v1</h3>
+                <p>قوة الحوسبة الكمومية في شريحة واحدة</p>
+                <div class="price">$500</div>
+                <button class="btn" onclick="buy('quantum_chip')">اطلب الآن</button>
+            </div>
+            <div class="product-card">
+                <div style="position: absolute; top: 10px; right: 10px; background: #ff007a; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold;">باقي 8 فقط!</div>
+                <h3>BioSync Module</h3>
+                <p>التزامن البيولوجي المتطور</p>
+                <div class="price">$275</div>
+                <button class="btn" onclick="buy('biosync')">اطلب الآن</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="chat-widget">
+        <div id="chat-header">وكيل المبيعات الذكي 🤖</div>
+        <div id="chat-messages">
+            <div class="message bot">مرحباً! أنا مساعدك الذكي في متجر Dodi-Store-16. كيف يمكنني مساعدتك؟</div>
+        </div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="اكتب سؤالك هنا...">
+            <button class="btn" id="send-btn" style="padding: 10px 15px;">إرسال</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const nudgeContainer = document.getElementById('nudge-container');
+
+        async function addMessage(text, isUser = false) {
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'bot'}`;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const query = chatInput.value;
+            if (!query) return;
+            
+            addMessage(query, true);
+            chatInput.value = '';
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-Bridge-Key': 'secure_bridge_key_2026'},
+                    body: JSON.stringify({query: query, session_id: 'agent_session'})
+                });
+                const data = await response.json();
+                addMessage(data.response);
+            } catch (error) {
+                addMessage("عذراً، حدث خطأ في الاتصال.");
+            }
+        }
+
+        sendBtn.onclick = sendMessage;
+        chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
+
+        async function buy(product) {
+            addMessage(`أرغب في شراء ${product}`, true);
+            const sessionId = 'agent_session'; // In a real app, this would be unique
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-Bridge-Key': 'secure_bridge_key_2026'},
+                    body: JSON.stringify({query: `buy ${product}`, session_id: sessionId})
+                });
+                const data = await response.json();
+                
+                // Add session_id to payment link if not present
+                let payLink = data.pay_link;
+                if (payLink && !payLink.includes('session_id')) {
+                    payLink += `&session_id=${sessionId}`;
+                }
+                
+                addMessage(data.response);
+            } catch (error) {
+                addMessage("عذراً، تعذر إتمام الطلب.");
+            }
+        }
+
+        // Nudge Logic - Check every 10 seconds for simulation (User said 1 min but 10s is better for testing)
+        setInterval(async () => {
+            try {
+                const response = await fetch('/check_nudge', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_id: 'agent_session'})
+                });
+                const data = await response.json();
+                if (data.nudge) {
+                    nudgeContainer.textContent = data.nudge;
+                    nudgeContainer.style.display = 'block';
+                    setTimeout(() => { nudgeContainer.style.display = 'none'; }, 5000);
+                    addMessage(data.nudge); // Also add to chat
+                }
+            } catch (e) { console.error("Nudge check failed"); }
+        }, 10000);
+    </script>
+</body>
+</html>
