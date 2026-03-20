@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غرفة العباقرة | Genius Room - Dodi Store 16</title>
+    <link rel="stylesheet" href="/static/css/genius-room.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Background Effects -->
+    <div class="cyber-grid"></div>
+    <div class="neon-glow"></div>
+
+    <!-- Main Container -->
+    <div class="genius-room-container">
+
+        <!-- Header -->
+        <header class="room-header">
+            <div class="header-content">
+                <h1 class="room-title">
+                    <span class="neon-text">غرفة العباقرة</span>
+                    <span class="subtitle">Genius Room</span>
+                </h1>
+                <div class="header-info">
+                    <span class="ai-count">🧠 <span id="activeAgentsCount">10</span> عقول نشطة</span>
+                    <span class="status-indicator">
+                        <span class="pulse-dot"></span>
+                        مباشر LIVE
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- Left Sidebar - AI Agents List -->
+            <aside class="agents-sidebar">
+                <div class="sidebar-header">
+                    <h2>🤖 العباقرة</h2>
+                    <button class="btn-select-all" id="selectAllBtn">اختر الكل</button>
+                </div>
+                <div class="agents-list" id="agentsList">
+                    <!-- AI agents will be populated here by JavaScript -->
+                </div>
+                <div class="sidebar-footer">
+                    <button class="btn-viral" id="shareBtn">
+                        🔥 شارك المحادثة
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Center - Chat Area -->
+            <main class="chat-area">
+                <div class="chat-header">
+                    <div class="selected-agents" id="selectedAgents">
+                        <span class="hint">اختر عبقريًا للبدء...</span>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="btn-clear" id="clearChatBtn" title="مسح المحادثة">🗑️</button>
+                        <button class="btn-export" id="exportBtn" title="تصدير">📥</button>
+                    </div>
+                </div>
+
+                <div class="messages-container" id="messagesContainer">
+                    <div class="welcome-message">
+                        <div class="welcome-content">
+                            <h2>مرحباً بك في غرفة العباقرة 🧠</h2>
+                            <p>هنا تجتمع 10+ عقول ذكاء اصطناعي في مكان واحد</p>
+                            <p class="welcome-hint">اختر عبقريًا من القائمة اليمنى وابدأ المحادثة</p>
+                            <div class="welcome-features">
+                                <div class="feature">⚡ ردود فورية</div>
+                                <div class="feature">🎯 شخصيات فريدة</div>
+                                <div class="feature">🔥 قابل للمشاركة</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator hidden" id="typingIndicator">
+                    <span class="typing-agent"></span>
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-container">
+                        <textarea id="messageInput" placeholder="اكتب رسالتك هنا..." rows="1" disabled></textarea>
+                        <button class="btn-send" id="sendBtn" disabled>
+                            <span class="send-icon">🚀</span>
+                        </button>
+                    </div>
+                    <div class="input-hint">
+                        اضغط <kbd>Enter</kbd> للإرسال، <kbd>Shift+Enter</kbd> لسطر جديد
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - Agent Details -->
+            <aside class="details-sidebar">
+                <div class="details-header">
+                    <h2>📊 التفاصيل</h2>
+                </div>
+                <div class="agent-details" id="agentDetails">
+                    <div class="no-selection">
+                        <div class="info-icon">ℹ️</div>
+                        <p>اختر عبقريًا لرؤية التفاصيل</p>
+                    </div>
+                </div>
+
+                <!-- Stats Panel -->
+                <div class="stats-panel">
+                    <h3>📈 إحصائيات الجلسة</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">الرسائل المرسلة:</span>
+                        <span class="stat-value" id="messagesSent">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">الردود المستلمة:</span>
+                        <span class="stat-value" id="responsesReceived">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">العباقرة النشطون:</span>
+                        <span class="stat-value" id="activeAgents">0</span>
+                    </div>
+                </div>
+
+                <!-- Store Events Panel -->
+                <div class="store-events-panel">
+                    <h3>🏪 أحداث المتجر المباشرة</h3>
+                    <div class="events-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoCommentToggle" checked>
+                            <span class="toggle-label">تعليق تلقائي</span>
+                        </label>
+                    </div>
+                    <div class="store-events-list" id="storeEventsList">
+                        <div class="no-events">
+                            <span class="event-icon">📡</span>
+                            <p>لا توجد أحداث بعد...</p>
+                            <p class="hint-text">افتح المتجر لبدء المراقبة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Viral Panel -->
+                <div class="viral-panel">
+                    <h3>🔥 الانتشار الفيروسي</h3>
+                    <p class="viral-hint">كل محادثة هي Node في شبكة Antigravity</p>
+                    <button class="btn-tiktok">📱 شارك على TikTok</button>
+                    <button class="btn-whatsapp">💬 أرسل على WhatsApp</button>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/ai-agents.js"></script>
+    <script src="/static/js/genius-room.js"></script>
+</body>
+
+</html>

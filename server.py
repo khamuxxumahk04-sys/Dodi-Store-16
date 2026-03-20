@@ -48,6 +48,11 @@ def home():
     """Main Landing Page for Dodi-Store-16."""
     return render_template('index.html')
 
+@app.route('/genius-room')
+def genius_room():
+    """The multi-agent Genius Room interface."""
+    return render_template('genius-room.html')
+
 from flask import send_file
 
 @app.route('/hero.png')
