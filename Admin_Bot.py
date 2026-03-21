@@ -2,6 +2,7 @@ import requests
 import os
 import time
 from dotenv import load_dotenv
+from Lead_Hunter import LeadHunter
 
 load_dotenv()
 
@@ -59,12 +60,16 @@ def poll_commands():
                     if from_id != CHAT_ID:
                         continue # Only respond to the owner
                         
-                    if text == "/stats":
-                        send_to_owner(get_stats())
-                    elif text == "/ping":
-                        send_to_owner("🏓 Pong! Dodi-Store-16 is running.")
                     elif text == "/help":
-                        send_to_owner("🤖 *Admin Bot Commands:*\n/stats - Get financial summary\n/ping - Check status")
+                        send_to_owner("🤖 *Admin Bot Commands:*\n/stats - Get financial summary\n/ping - Check status\n/hunt - Scan social media for leads")
+                    elif text == "/hunt":
+                        send_to_owner("🦅 *Scanning social frequencies for leads...*")
+                        try:
+                            hunter = LeadHunter()
+                            hunter.hunt_reddit()
+                            send_to_owner("✅ *Hunt cycle complete!* Check your alerts for new leads.")
+                        except Exception as e:
+                            send_to_owner(f"❌ *Hunt failed:* {e}")
             
             time.sleep(3)
         except Exception as e:

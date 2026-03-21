@@ -415,7 +415,8 @@ class GeniusRoom {
     }
 
     shareViral() {
-        const summary = `انضممت لغرفة العباقرة في Dodi Store 16! 🧠\n\n${this.selectedAgents.size} عقول ذكاء اصطناعي يساعدونني الآن.\n\nمن الفوضى إلى النظام الذكي 🔥\n\n#DodiStore16 #AntigravityChallenge`;
+        const url = window.location.origin;
+        const summary = `🔥 انضممت الآن لنخبة الـ Genius Room في Dodi Store 16! 🧠\n\nأنا الآن في حوار مباشر مع 10 عقول اصطناعية خارقة في مكان واحد. 🚀\n\nأتمتة، ذكاء، ومستقبل رقمي مذهل.. انضم إلينا هنا:\n${url}\n\n#DodiStore16 #GeniusRoom #AntigravityChallenge #AI2026`;
 
         const shareUrl = `https://wa.me/?text=${encodeURIComponent(summary)}`;
         window.open(shareUrl, '_blank');

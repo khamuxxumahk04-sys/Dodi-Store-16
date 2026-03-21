@@ -43,15 +43,45 @@ def _is_authorized(headers) -> bool:
 
 
 # ── Endpoints ───────────────────────────────────────────────────────
-@app.route('/')
-def home():
-    """Main Landing Page for Dodi-Store-16."""
-    return render_template('index.html')
-
 @app.route('/genius-room')
 def genius_room():
-    """The multi-agent Genius Room interface."""
-    return render_template('genius-room.html')
+    """The multi-agent Genius Room interface. Locked by a paywall."""
+    # Check for simple access token in session or URL (for MVP)
+    token = request.args.get('token')
+    if token == "genius_access_granted_2026":
+        return render_template('genius-room.html', authorized=True)
+    
+    # If not authorized, show the 'Locked' version
+    return render_template('genius-room.html', authorized=False)
+
+@app.route('/buy-genius-pass')
+def buy_genius_pass():
+    """Generates a Stripe Checkout session for the Genius Pass."""
+    try:
+        import stripe
+        stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+        
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'aed',
+                    'product_data': {
+                        'name': 'Genius Room - One-Day Access Pass',
+                        'description': 'اتصال فائق الذكاء مع 10+ عقول اصطناعية',
+                    },
+                    'unit_amount': 9900, # 99 AED
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=BASE_URL + '/genius-room?token=genius_access_granted_2026',
+            cancel_url=BASE_URL + '/genius-room',
+        )
+        return jsonify({"url": session.url})
+    except Exception as e:
+        logger.error(f"Error creating Genius Pass session: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 from flask import send_file
 

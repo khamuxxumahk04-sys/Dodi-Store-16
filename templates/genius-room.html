@@ -19,6 +19,7 @@
     <div class="neon-glow"></div>
 
     <!-- Main Container -->
+    {% if authorized %}
     <div class="genius-room-container">
 
         <!-- Header -->
@@ -164,6 +165,46 @@
 
         </div>
     </div>
+    {% else %}
+    <!-- Cyber-Gate Paywall -->
+    <div class="paywall-gate">
+        <div class="gate-content">
+            <div class="gate-icon">🔐</div>
+            <h1 class="gate-title">غرفة العباقرة | مـؤمـنة</h1>
+            <p class="gate-description">
+                أنت الآن أمام أقوى تجمع للعقول الاصطناعية (10+ عباقرة). 
+                <br>هذا المحتوى يتطلب <b>تصريح دخول (Genius Pass)</b> لتجربة القوة الكاملة.
+            </p>
+            <button class="btn-buy-pass" id="buyPassBtn">
+                الحصول على التصريح 🚀
+            </button>
+            <span class="price-tag">99 AED فقط | دخول بلا حدود</span>
+        </div>
+    </div>
+    <script>
+        document.getElementById('buyPassBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('buyPassBtn');
+            btn.disabled = true;
+            btn.innerText = 'جاري التحضير...';
+            try {
+                const response = await fetch('/buy-genius-pass');
+                const data = await response.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('خطأ في الاتصال بـ Stripe');
+                    btn.disabled = false;
+                    btn.innerText = 'الحصول على التصريح 🚀';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('فشل في جلب رابط الدفع');
+                btn.disabled = false;
+                btn.innerText = 'الحصول على التصريح 🚀';
+            }
+        });
+    </script>
+    {% endif %}
 
     <!-- Toast Notifications -->
     <div class="toast-container" id="toastContainer"></div>
