@@ -43,6 +43,11 @@ def _is_authorized(headers) -> bool:
 
 
 # ── Endpoints ───────────────────────────────────────────────────────
+@app.route('/')
+def home():
+    """Main Landing Page for Dodi-Store-16."""
+    return render_template('index.html')
+
 @app.route('/genius-room')
 def genius_room():
     """The multi-agent Genius Room interface. Locked by a paywall."""
