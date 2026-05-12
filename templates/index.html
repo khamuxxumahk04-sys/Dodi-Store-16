@@ -63,6 +63,7 @@
             <nav class="space-x-4 space-x-reverse hidden md:block">
                 <a href="#solutions" class="hover:text-cyan-400 transition">الحلول الذكية</a>
                 <a href="#dashboard" class="hover:text-cyan-400 transition">لوحتي</a>
+                <a href="/genius-room" class="hover:text-cyan-400 transition font-bold text-cyan-300">غرفة العباقرة 🧠</a>
             </nav>
             <div class="cursor-pointer relative" onclick="toggleCart()">
                 <span class="text-2xl">🛒</span>
@@ -303,6 +304,15 @@
                 document.getElementById('typing').remove();
                 addMessage(data.response, 'bot');
                 
+                // Emit Gigi response event
+                if (window.storeBridge) {
+                    window.storeBridge.emit('gigi_response', {
+                        userMessage: message,
+                        gigiResponse: data.response,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+
                 if (data.pay_link) {
                    addMessage(`🔗 يمكنك إتمام الطلب من هنا: ${data.pay_link}`, 'bot');
                 }

@@ -37,7 +37,7 @@ function initGigiAgent() {
                 welcomeMsg.className = 'text-center mb-8 animate-fade-in';
                 welcomeMsg.innerHTML = `
                     <div class="inline-block p-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
-                        <img src="images/finalAvatar.webp" onerror="this.src='https://placehold.co/100/0a192f/00ccff?text=Gigi'" class="w-20 h-20 rounded-full border-4 border-gray-900" alt="Gigi">
+                        <img src="/static/images/finalAvatar.webp" onerror="this.src='https://placehold.co/100/0a192f/00ccff?text=Gigi'" class="w-20 h-20 rounded-full border-4 border-gray-900" alt="Gigi">
                     </div>
                     <h3 class="text-3xl font-bold text-white mb-2">مرحباً، أنا <span class="text-cyan-400">جيجي</span></h3>
                     <p class="text-cyan-200">وكيلتك الذكية لإدارة الأصول الرقمية. إليك أحدث الحلول المختارة لك:</p>
@@ -50,7 +50,7 @@ function initGigiAgent() {
                 productsContainer.classList.remove('hidden');
                 renderProducts();
             }
-        }, 2000);
+        }, 500);
     } catch (error) {
         console.error('❌ Failed to initialize Gigi:', error);
         if (window.storeBridge) window.storeBridge.emit('error', { context: 'initGigiAgent', message: error.message });
@@ -178,13 +178,13 @@ window.checkout = function () {
 
     // 1. Calculate Totals
     const total = window.cart.reduce((sum, item) => sum + item.price, 0);
-    const itemsList = window.cart.map((item, index) => `${index + 1}. ${item.name} (${item.price} د.إ)`).join('%0A');
+    const itemsList = window.cart.map((item, index) => `${index + 1}. ${item.name} (${item.price} د.إ)`).join('\n');
 
-    // 2. Format Message (URL Encoded)
-    const message = `*مرحباً Dodi Store، أريد إتمام الطلب التالي:*%0A%0A` +
-        `🛒 *المنتجات:*%0A${itemsList}%0A%0A` +
-        `💰 *الإجمالي:* ${total} د.إ%0A%0A` +
-        `يرجى تزويدي برابط الدفع أو طريقة التحويل. شكراً!`;
+    // 2. Format Message
+    const message = encodeURIComponent(`*مرحباً Dodi Store، أريد إتمام الطلب التالي:* \n\n` +
+        `🛒 *المنتجات:* \n${itemsList} \n\n` +
+        `💰 *الإجمالي:* ${total} د.إ \n\n` +
+        `يرجى تزويدي برابط الدفع أو طريقة التحويل. شكراً!`);
 
     // 3. Redirect to WhatsApp
     const phoneNumber = "971568986125";
@@ -206,133 +206,6 @@ window.checkout = function () {
 // Start the agent
 initGigiAgent();
 
-// --- Gigi Chatbot Logic ---
-
-window.toggleChat = function () {
-    const chatInterface = document.getElementById('chat-interface');
-    chatInterface.classList.toggle('hidden');
-    if (!chatInterface.classList.contains('hidden')) {
-        document.getElementById('user-input').focus();
-    }
-}
-
-window.handleEnter = function (event) {
-    if (event.key === 'Enter') {
-        sendMessage();
-    }
-}
-
-window.sendMessage = function () {
-    const inputField = document.getElementById('user-input');
-    const message = inputField.value.trim();
-    if (message === "") return;
-
-    // User Message
-    addMessage(message, 'user');
-    inputField.value = "";
-
-    // Emit user message event
-    if (window.storeBridge) {
-        window.storeBridge.emit('gigi_message_sent', {
-            message: message,
-            timestamp: new Date().toISOString()
-        });
-    }
-
-    // Simulate Thinking
-    const typingIndicator = document.createElement('div');
-    typingIndicator.id = 'typing';
-    typingIndicator.className = 'text-xs text-cyan-400 ml-4 mb-2 animate-pulse';
-    typingIndicator.innerText = 'Gigi is thinking...';
-    document.getElementById('chat-messages').appendChild(typingIndicator);
-
-    // Auto Scroll
-    scrollToBottom();
-
-    // Robot Response
-    setTimeout(() => {
-        document.getElementById('typing').remove();
-        const response = generateResponse(message);
-        addMessage(response, 'bot');
-
-        // Emit Gigi response event
-        if (window.storeBridge) {
-            window.storeBridge.emit('gigi_response', {
-                userMessage: message,
-                gigiResponse: response,
-                timestamp: new Date().toISOString()
-            });
-        }
-    }, 1000); // 1 second delay
-}
-
-function addMessage(text, sender) {
-    const chatContainer = document.getElementById('chat-messages');
-    const msgDiv = document.createElement('div');
-
-    if (sender === 'user') {
-        msgDiv.className = 'bg-cyan-900 p-3 rounded-tl-lg rounded-bl-lg rounded-br-lg text-sm text-white ml-auto max-w-[80%]';
-    } else {
-        msgDiv.className = 'bg-gray-800 p-3 rounded-tr-lg rounded-bl-lg rounded-br-lg text-sm text-gray-200 mr-auto max-w-[80%]';
-    }
-
-    msgDiv.innerText = text;
-    chatContainer.appendChild(msgDiv);
-    scrollToBottom();
-}
-
-function scrollToBottom() {
-    const chatContainer = document.getElementById('chat-messages');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-// Simple NLP Engine
-// Gigi Chatbot Logic (Gulf Dialect Persona)
-function generateResponse(input) {
-    const lowerInput = input.toLowerCase();
-
-    // 1. Greetings & Identity
-    if (lowerInput.includes('مرحبا') || lowerInput.includes('هلا') || lowerInput.includes('السلام')) {
-        return "هلا والله! منور المتجر ✨.. أنا جيجي، آمرني وش بخاطرك اليوم؟";
-    }
-
-    if (lowerInput.includes('من انت') || lowerInput.includes('who are you') || lowerInput.includes('جيجي') || lowerInput.includes('gigi')) {
-        return "أنا جيجي (Gigi)، المساعدة الذكية هنا. أحول لك الطلبات المعقدة لحلول بسيطة بلمسة زر 😉.";
-    }
-
-    if (lowerInput.includes('ضحى') || lowerInput.includes('dodi')) {
-        return "الغالية ضحى ❤️.. هي العقل المدبر وراء كل هذا الإبداع، ونحن هنا ننفذ رؤيتها.";
-    }
-
-    // 2. Pricing & "Expensive" Queries (Sales Handling)
-    if (lowerInput.includes('سعر') || lowerInput.includes('بكم') || lowerInput.includes('price')) {
-        return "الأسعار عندنا تبدأ من 550 د.إ، وكل شيء بقيمته وزيادة! خبرني وش مشروعك وأعطيك الزبدة.";
-    }
-
-    if (lowerInput.includes('غالي') || lowerInput.includes('expensive')) {
-        return "الغالي للغالي 😉.. صدقني الاستثمار في الجودة يريحك قدام وتوفر على نفسك كثير.";
-    }
-
-    if (lowerInput.includes('بفكر') || lowerInput.includes('thinking')) {
-        return "خذ وقتك أكيد، بس الفرص الذكية ما تنتظر كثير 🚀.. إذا عندك استفسار معين أنا موجودة.";
-    }
-
-    // 3. Product Specifics
-    if (lowerInput.includes('أمن') || lowerInput.includes('security') || lowerInput.includes('هكر') || lowerInput.includes('اختراق')) {
-        const product = products.find(p => p.id === 1);
-        return `موضوع الحماية ما فيه لعب 🛡️.. أنصحك بـ "${product.name}" وسعره ${product.price} د.إ. يحميك ويحمي شغلك.`;
-    }
-
-    if (lowerInput.includes('موقع') || lowerInput.includes('ويب') || lowerInput.includes('web') || lowerInput.includes('برمجة')) {
-        const product = products.find(p => p.id === 3);
-        return `تبي موقع يواجه؟ مالك إلا "${product.name}" بـ ${product.price} د.إ. شغل احترافي من الآخر.`;
-    }
-
-    if (lowerInput.includes('بوت') || lowerInput.includes('bot') || lowerInput.includes('شات') || lowerInput.includes('chat')) {
-        return "تبي مثلي؟ 😎 عندنا خدمات تطوير شات بوت ذكية تخدم عملاءك 24 ساعة.";
-    }
-
-    // 4. Default / Menu Fallback
-    return "سؤال جميل بس يبي له تفصيل 🤔.. وش رأيك تشوف قسم 'الحلول الذكية' فوق؟ أو اضغط على أيقونة الواتساب ونتفاهم هناك أسرع.";
-}
+// Start the agent
+initGigiAgent();
 
